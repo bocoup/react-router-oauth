@@ -85,7 +85,7 @@ grunt.initConfig({
   watch,
 });
 
-grunt.registerTask('build', ['clean', 'babel']);
+grunt.registerTask('build', ['test', 'clean', 'babel']);
 grunt.registerTask('test', ['eslint', 'mochaTest']);
 grunt.registerTask('default', ['watch']);
 
