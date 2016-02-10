@@ -1,5 +1,6 @@
 {
   "name": "react-router-oauth",
+  "description": "Basic oauth support for react-router",
   "version": "0.1.0",
   "dependencies": {
     "babel-plugin-transform-runtime": "^6.4.0",
