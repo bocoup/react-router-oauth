@@ -85,22 +85,18 @@ export default class Auth {
 
   // React-router onEnter handler. If the given route (or any child route) is
   // not authed, redirect to the specified `loginRoute`
-  requireAuth() {
-    return (nextState, replace) => {
+  requireAuth(nextState, replace) {
       if (!this.isLoggedIn()) {
         const nextPathname = this.getRoutePath(nextState.location);
         this.redirectToLogin({replace, nextPathname});
       }
-    };
   }
 
   // React-router onEnter handler. If the given route (or any child route) is
   // authed, redirect to the specified `loggedInRoute`
-  requireNoAuth() {
-    return (nextState, replace) => {
+  requireNoAuth(nextState, replace) {
       if (this.isLoggedIn()) {
         replace(this.loggedInRoute);
       }
-    };
   }
 }
