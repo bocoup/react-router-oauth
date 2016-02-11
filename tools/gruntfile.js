@@ -26,6 +26,10 @@ const eslint = {
     options: {configFile: 'src/.eslintrc-test.yaml'},
     src: 'src/**/*.test.js',
   },
+  examples: {
+    options: {configFile: 'examples/.eslintrc.yaml'},
+    src: 'examples/**/*.{js,jsx}',
+  },
   tools: {
     options: {configFile: 'tools/.eslintrc.yaml'},
     src: 'tools/**/*.js',
