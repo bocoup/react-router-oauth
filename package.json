@@ -12,7 +12,7 @@
     "build"
   ],
   "scripts": {
-    "prepublish": "grunt build",
+    "prepublish": "grunt test build",
     "build": "grunt build",
     "test": "grunt test"
   },
