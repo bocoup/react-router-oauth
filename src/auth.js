@@ -15,6 +15,7 @@ export default class Auth {
     this.loggedInRoute = loggedInRoute;
     this.authUrl = authUrl;
     this.parseCredentials = parseCredentials;
+    this.baseHref = null;
     // Simplify passing methods around.
     bindMethods(this);
   }
@@ -63,8 +64,35 @@ export default class Auth {
 
   // Pass in a location object, and get back path + querystring as a string.
   // Don't pass in anything to use the current page's location object.
-  getRoutePath({pathname, search = ''} = location) {
+  getRoutePath(_location) {
+    let pathname, search;
+    if (_location) {
+      ({pathname, search} = _location);
+    }
+    else {
+      ({pathname, search} = location);
+      pathname = pathname.slice(this.getBasePath().length);
+    }
     return `${pathname}${search}`;
+  }
+
+  // Get relative "base" path for the current app.
+  getBasePath() {
+    if (this.baseHref === null) {
+      const elem = document.getElementsByTagName('base')[0];
+      const href = elem && elem.getAttribute('href') || '';
+      this.baseHref = href.replace(/\/$/, '');
+    }
+    return this.baseHref;
+  }
+
+  // Get absolute "base" path for the current app.
+  getBaseUrl(path) {
+    if (!path) {
+      path = this.loggedInRoute;
+    }
+    const baseHref = this.getBasePath();
+    return `${location.protocol}//${location.host}${baseHref}${path}`;
   }
 
   // Redirect to the login page. If `replace` is specified, that replace
@@ -86,17 +114,17 @@ export default class Auth {
   // React-router onEnter handler. If the given route (or any child route) is
   // not authed, redirect to the specified `loginRoute`
   requireAuth(nextState, replace) {
-      if (!this.isLoggedIn()) {
-        const nextPathname = this.getRoutePath(nextState.location);
-        this.redirectToLogin({replace, nextPathname});
-      }
+    if (!this.isLoggedIn()) {
+      const nextPathname = this.getRoutePath(nextState.location);
+      this.redirectToLogin({replace, nextPathname});
+    }
   }
 
   // React-router onEnter handler. If the given route (or any child route) is
   // authed, redirect to the specified `loggedInRoute`
   requireNoAuth(nextState, replace) {
-      if (this.isLoggedIn()) {
-        replace(this.loggedInRoute);
-      }
+    if (this.isLoggedIn()) {
+      replace(this.loggedInRoute);
+    }
   }
 }
