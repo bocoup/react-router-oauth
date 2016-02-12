@@ -26,6 +26,10 @@ const eslint = {
     options: {configFile: 'src/.eslintrc-test.yaml'},
     src: 'src/**/*.test.js',
   },
+  examples: {
+    options: {configFile: 'examples/.eslintrc.yaml'},
+    src: 'examples/**/*.{js,jsx}',
+  },
   tools: {
     options: {configFile: 'tools/.eslintrc.yaml'},
     src: 'tools/**/*.js',
@@ -54,7 +58,7 @@ const mochaTest = {
 const watch = {
   src: {
     files: ['<%= eslint.src.src %>'],
-    tasks: ['eslint:src', 'mochaTest'],
+    tasks: ['eslint:src', 'mochaTest', 'build'],
   },
   test: {
     files: ['<%= eslint.test.src %>'],
@@ -85,7 +89,7 @@ grunt.initConfig({
   watch,
 });
 
-grunt.registerTask('build', ['test', 'clean', 'babel']);
+grunt.registerTask('build', ['clean', 'babel']);
 grunt.registerTask('test', ['eslint', 'mochaTest']);
 grunt.registerTask('default', ['watch']);
 
