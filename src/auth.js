@@ -6,6 +6,7 @@ export default class Auth {
     key = 'credentials',
     loginRoute = '/login',
     loggedInRoute = '/',
+    storage,
     authUrl,
     parseCredentials,
   }) {
@@ -13,6 +14,7 @@ export default class Auth {
     this.key = key;
     this.loginRoute = loginRoute;
     this.loggedInRoute = loggedInRoute;
+    this.storage = storage;
     this.authUrl = authUrl;
     this.parseCredentials = parseCredentials;
     this.baseHref = null;
@@ -26,14 +28,14 @@ export default class Auth {
       throw new TypeError('Missing login credentials.');
     }
     const json = JSON.stringify(credentials);
-    localStorage.setItem(this.key, json);
+    this.storage.setItem(this.key, json);
   }
 
   // Remove stored credentials. If `redirectBack` is true, logging in will
   // redirect back to the current route instead of the default `loggedInRoute`.
   // (use in cases where the user gets automatically logged out)
   logout({redirectBack} = {}) {
-    localStorage.removeItem(this.key);
+    this.storage.removeItem(this.key);
     // Redirect to the login page.
     if (this.browserHistory) {
       const nextPathname = redirectBack ? this.getRoutePath() : this.loggedInRoute;
@@ -45,13 +47,13 @@ export default class Auth {
   // the current environment, and then store them if found. If "exists" is
   // true, return a Boolean value based on whether or not they are stored.
   getCredentials({exists} = {}) {
-    let json = localStorage.getItem(this.key);
+    let json = this.storage.getItem(this.key);
     if (!json) {
       const credentials = this.parseCredentials();
       if (credentials) {
         this.login(credentials);
       }
-      json = localStorage.getItem(this.key);
+      json = this.storage.getItem(this.key);
     }
     return exists ? Boolean(json) : json ? JSON.parse(json) : {};
   }

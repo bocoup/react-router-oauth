@@ -5,6 +5,7 @@ import Auth from 'react-router-oauth';
 // A few app defaults.
 const loginRoute = '/login';
 const loggedInRoute = '/';
+const storage = localStorage;
 
 // Not actually used by the auth system, but it's related.
 function authUrl(redirectTo) {
@@ -41,4 +42,5 @@ export default new Auth({
   loggedInRoute,
   authUrl,
   parseCredentials,
+  storage,
 });
